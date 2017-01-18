@@ -14,7 +14,7 @@
 ** limitations under the License.
 */
 
-package xyz.hexene.localvpn;
+package com.coolsharp;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,20 +27,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import org.greenrobot.eventbus.EventBus;
 
-public class LocalVPN extends ActionBarActivity
-{
+import xyz.hexene.coolsharp.R;
+
+
+public class LocalVPN extends ActionBarActivity {
     private static final int VPN_REQUEST_CODE = 0x0F;
 
     private boolean waitingForVPNStart;
 
-    private BroadcastReceiver vpnStateReceiver = new BroadcastReceiver()
-    {
+    private Intent intent;
+
+    private BroadcastReceiver vpnStateReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            if (LocalVPNService.BROADCAST_VPN_STATE.equals(intent.getAction()))
-            {
+        public void onReceive(Context context, Intent intent) {
+            if (LocalVPNService.BROADCAST_VPN_STATE.equals(intent.getAction())) {
                 if (intent.getBooleanExtra("running", false))
                     waitingForVPNStart = false;
             }
@@ -48,17 +50,20 @@ public class LocalVPN extends ActionBarActivity
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
-        final Button vpnButton = (Button)findViewById(R.id.vpn);
-        vpnButton.setOnClickListener(new View.OnClickListener()
-        {
+        final Button vpnButton = (Button) findViewById(R.id.vpn);
+        intent = new Intent(this, LocalVPNService.class);
+        vpnButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                startVPN();
+            public void onClick(View v) {
+                if (isRunning()) {
+                    startVPN();
+                } else {
+                    EventBus.getDefault().post(new EventVpn());
+                    stopService(intent);
+                }
             }
         });
         waitingForVPNStart = false;
@@ -66,8 +71,7 @@ public class LocalVPN extends ActionBarActivity
                 new IntentFilter(LocalVPNService.BROADCAST_VPN_STATE));
     }
 
-    private void startVPN()
-    {
+    private void startVPN() {
         Intent vpnIntent = VpnService.prepare(this);
         if (vpnIntent != null)
             startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
@@ -76,14 +80,12 @@ public class LocalVPN extends ActionBarActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK)
-        {
+        if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK) {
             waitingForVPNStart = true;
-            startService(new Intent(this, LocalVPNService.class));
-            enableButton(false);
+            startService(intent);
+//            enableButton(false);
         }
     }
 
@@ -91,20 +93,20 @@ public class LocalVPN extends ActionBarActivity
     protected void onResume() {
         super.onResume();
 
-        enableButton(!waitingForVPNStart && !LocalVPNService.isRunning());
+        enableButton(isRunning());
     }
 
-    private void enableButton(boolean enable)
-    {
+    private boolean isRunning() {
+        return !waitingForVPNStart && !LocalVPNService.isRunning();
+    }
+
+    private void enableButton(boolean enable) {
         final Button vpnButton = (Button) findViewById(R.id.vpn);
-        if (enable)
-        {
-            vpnButton.setEnabled(true);
+        if (enable) {
+//            vpnButton.setEnabled(true);
             vpnButton.setText(R.string.start_vpn);
-        }
-        else
-        {
-            vpnButton.setEnabled(false);
+        } else {
+//            vpnButton.setEnabled(false);
             vpnButton.setText(R.string.stop_vpn);
         }
     }
