@@ -21,15 +21,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.VpnService;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import org.greenrobot.eventbus.EventBus;
-
-import xyz.hexene.coolsharp.R;
 
 
 public class LocalVPN extends ActionBarActivity {

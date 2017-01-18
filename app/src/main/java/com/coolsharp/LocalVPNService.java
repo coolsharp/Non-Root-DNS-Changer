@@ -25,8 +25,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import xyz.hexene.coolsharp.R;
-
 public class LocalVPNService extends VpnService {
     private static final String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
     private static final String DNS2 = "10.102.4.1"; // Intercept everything
