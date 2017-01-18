@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class LocalVPNService extends VpnService {
+public class LocalVpnService extends VpnService {
     // [final/static_property]====================[START]===================[final/static_property]
 
     final static private String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now

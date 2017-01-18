@@ -30,7 +30,7 @@ import android.widget.Button;
 import org.greenrobot.eventbus.EventBus;
 
 
-public class LocalVPNActivity extends ActionBarActivity {
+public class LocalVpnActivity extends ActionBarActivity {
     // [final/static_property]====================[START]===================[final/static_property]
     // [final/static_property]=====================[END]====================[final/static_property]
     // [private/protected/public_property]========[START]=======[private/protected/public_property]
@@ -45,7 +45,7 @@ public class LocalVPNActivity extends ActionBarActivity {
     private BroadcastReceiver vpnStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (LocalVPNService.BROADCAST_VPN_STATE.equals(intent.getAction())) {
+            if (LocalVpnService.BROADCAST_VPN_STATE.equals(intent.getAction())) {
                 if (intent.getBooleanExtra("running", false))
                     waitingForVPNStart = false;
             }
@@ -62,7 +62,7 @@ public class LocalVPNActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
         final Button vpnButton = (Button) findViewById(R.id.vpn);
-        intent = new Intent(this, LocalVPNService.class);
+        intent = new Intent(this, LocalVpnService.class);
         vpnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +76,7 @@ public class LocalVPNActivity extends ActionBarActivity {
         });
         waitingForVPNStart = false;
         LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
-                new IntentFilter(LocalVPNService.BROADCAST_VPN_STATE));
+                new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class LocalVPNActivity extends ActionBarActivity {
     // [get/set]==================================[START]=================================[get/set]
 
     private boolean isRunning() {
-        return !waitingForVPNStart && !LocalVPNService.isRunning();
+        return !waitingForVPNStart && !LocalVpnService.isRunning();
     }
 
     // [get/set]===================================[END]==================================[get/set]
