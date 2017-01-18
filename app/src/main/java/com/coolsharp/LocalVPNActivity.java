@@ -30,12 +30,17 @@ import android.widget.Button;
 import org.greenrobot.eventbus.EventBus;
 
 
-public class LocalVPN extends ActionBarActivity {
+public class LocalVPNActivity extends ActionBarActivity {
+    // [final/static_property]====================[START]===================[final/static_property]
+    // [final/static_property]=====================[END]====================[final/static_property]
+    // [private/protected/public_property]========[START]=======[private/protected/public_property]
+
     private static final int VPN_REQUEST_CODE = 0x0F;
-
     private boolean waitingForVPNStart;
-
     private Intent intent;
+
+    // [private/protected/public_property]=========[END]========[private/protected/public_property]
+    // [interface/enum/inner_class]===============[START]==============[interface/enum/inner_class]
 
     private BroadcastReceiver vpnStateReceiver = new BroadcastReceiver() {
         @Override
@@ -46,6 +51,11 @@ public class LocalVPN extends ActionBarActivity {
             }
         }
     };
+
+    // [interface/enum/inner_class]================[END]===============[interface/enum/inner_class]
+    // [inherited/listener_method]================[START]===============[inherited/listener_method]
+    // [inherited/listener_method]=================[END]================[inherited/listener_method]
+    // [life_cycle_method]========================[START]=======================[life_cycle_method]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +79,6 @@ public class LocalVPN extends ActionBarActivity {
                 new IntentFilter(LocalVPNService.BROADCAST_VPN_STATE));
     }
 
-    private void startVPN() {
-        Intent vpnIntent = VpnService.prepare(this);
-        if (vpnIntent != null)
-            startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
-        else
-            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -94,8 +96,15 @@ public class LocalVPN extends ActionBarActivity {
         enableButton(isRunning());
     }
 
-    private boolean isRunning() {
-        return !waitingForVPNStart && !LocalVPNService.isRunning();
+    // [life_cycle_method]=========================[END]========================[life_cycle_method]
+    // [private_method]===========================[START]==========================[private_method]
+
+    private void startVPN() {
+        Intent vpnIntent = VpnService.prepare(this);
+        if (vpnIntent != null)
+            startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
+        else
+            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
     }
 
     private void enableButton(boolean enable) {
@@ -108,4 +117,15 @@ public class LocalVPN extends ActionBarActivity {
             vpnButton.setText(R.string.stop_vpn);
         }
     }
+
+    // [private_method]============================[END]===========================[private_method]
+    // [public_method]============================[START]===========================[public_method]
+    // [public_method]=============================[END]============================[public_method]
+    // [get/set]==================================[START]=================================[get/set]
+
+    private boolean isRunning() {
+        return !waitingForVPNStart && !LocalVPNService.isRunning();
+    }
+
+    // [get/set]===================================[END]==================================[get/set]
 }

@@ -1,18 +1,19 @@
+
 /*
-** Copyright 2015, Mohamed Naufal
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
+ *                                             `''~``"
+ *                                           &( ^ a ^ )&
+ * ---------------------------------------.oooO-------Oooo.----------------------------------------
+ *  Description :
+ *  Date        : 17. 1. 18 오후 9:50
+ *  Author      : coolsharp
+ *  History     : 17. 1. 18 오후 9:50
+ *                                           .oooO
+ *                                          (   )   Oooo.
+ * -----------------------------------------\ (----(   )-----------------------------coolsharp 2017
+ *                                          \_)    ) /
+ *                                               (_/
+ *
+ */
 
 package com.coolsharp;
 
@@ -26,16 +27,32 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class LocalVPNService extends VpnService {
-    private static final String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
-    private static final String DNS2 = "10.102.4.1"; // Intercept everything
+    // [final/static_property]====================[START]===================[final/static_property]
 
-    public static final String BROADCAST_VPN_STATE = "com.coolsharp.VPN_STATE";
+    final static private String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
+    final static private String DNS2 = "10.102.4.1"; // Intercept everything
+    final static public String BROADCAST_VPN_STATE = "com.coolsharp.VPN_STATE";
 
-    private static boolean isRunning = false;
+    static private boolean isRunning = false;
+
+    // [final/static_property]=====================[END]====================[final/static_property]
+    // [private/protected/public_property]========[START]=======[private/protected/public_property]
 
     private ParcelFileDescriptor vpnInterface = null;
+    private PendingIntent pendingIntent = null;
 
-    private PendingIntent pendingIntent;
+    // [private/protected/public_property]=========[END]========[private/protected/public_property]
+    // [interface/enum/inner_class]===============[START]==============[interface/enum/inner_class]
+    // [interface/enum/inner_class]================[END]===============[interface/enum/inner_class]
+    // [inherited/listener_method]================[START]===============[inherited/listener_method]
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_NOT_STICKY; // 서비스가 죽으면 다시 실행 금지
+    }
+
+    // [inherited/listener_method]=================[END]================[inherited/listener_method]
+    // [life_cycle_method]========================[START]=======================[life_cycle_method]
 
     @Override
     public void onCreate() {
@@ -43,10 +60,17 @@ public class LocalVPNService extends VpnService {
         EventBus.getDefault().register(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(EventVpn event) {/* Do something */};
+    @Override
+    public void onDestroy() {
+        isRunning = false;
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
-    private void setupVPN(String dns1) {
+    // [life_cycle_method]=========================[END]========================[life_cycle_method]
+    // [private_method]===========================[START]==========================[private_method]
+
+    private void setDns(String dns1) {
         if (vpnInterface == null) {
             isRunning = true;
             Builder builder = new Builder();
@@ -57,19 +81,20 @@ public class LocalVPNService extends VpnService {
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_NOT_STICKY; // 서비스가 죽으면 다시 실행 금지
+    // [private_method]============================[END]===========================[private_method]
+    // [public_method]============================[START]===========================[public_method]
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventVpn event) {
+
     }
+
+    // [public_method]=============================[END]============================[public_method]
+    // [get/set]==================================[START]=================================[get/set]
 
     public static boolean isRunning() {
         return isRunning;
     }
 
-    @Override
-    public void onDestroy() {
-        isRunning = false;
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
+    // [get/set]===================================[END]==================================[get/set]
 }
