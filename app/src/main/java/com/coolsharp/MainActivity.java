@@ -75,10 +75,9 @@ public class MainActivity extends ActionBarActivity {
         final Button vpnButton = (Button) findViewById(R.id.vpn);
         vpnButton.setOnClickListener(v -> {
             if (isRunning()) {
-                startVPN();
+                startVpn();
             } else {
-                EventBus.getDefault().post(new EventVpn(EventVpn.DnsStatus.DS_STOP));
-                isRunningVpn = false;
+                stopVpn();
             }
         });
         isRunningVpn = false;
@@ -118,12 +117,20 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Vpn 시작
      */
-    private void startVPN() {
+    private void startVpn() {
         Intent vpnIntent = VpnService.prepare(this);
         if (vpnIntent != null)
             startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
         else
             onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+    }
+
+    /**
+     * Vpn 중지
+     */
+    private void stopVpn() {
+        EventBus.getDefault().post(new EventVpn(EventVpn.DnsStatus.DS_STOP));
+        isRunningVpn = false;
     }
 
     // [private_method]============================[END]===========================[private_method]
