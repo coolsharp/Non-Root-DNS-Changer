@@ -24,6 +24,7 @@ import android.net.VpnService;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,6 +43,8 @@ public class MainActivity extends ActionBarActivity {
 
     /** 작동중 */
     private boolean isRunningVpn;
+
+    private RecyclerView recyclerView;
 
     // [private/protected/public_property]=========[END]========[private/protected/public_property]
     // [interface/enum/inner_class]===============[START]==============[interface/enum/inner_class]
@@ -73,6 +76,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
         final Button vpnButton = (Button) findViewById(R.id.vpn);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        DnsRecyclerViewAdapter dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
+        recyclerView.setAdapter(dnsRecyclerViewAdapter);
         vpnButton.setOnClickListener(v -> {
             if (isRunning()) {
                 startVpn();
