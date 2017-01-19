@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "xyz.hexene.localvpn"
+        applicationId "com.coolsharp.localvpn"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
