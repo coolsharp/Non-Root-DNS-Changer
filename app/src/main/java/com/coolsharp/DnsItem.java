@@ -30,6 +30,9 @@ public class DnsItem {
     @SerializedName("dns")
     @Expose
     private String dns;
+    @SerializedName("project")
+    @Expose
+    private String project;
 
     public String getName() {
         return name;
@@ -45,5 +48,13 @@ public class DnsItem {
 
     public void setDns(String dns) {
         this.dns = dns;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
     }
 }

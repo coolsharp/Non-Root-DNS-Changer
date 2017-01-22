@@ -20,7 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 /**
  * Created by cools on 2017-01-20.
@@ -38,14 +39,16 @@ public class DnsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public final static class DnsItemViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName;
-        TextView tvDns;
+        public BootstrapButton bbName;
+        public BootstrapButton bbIp;
+        public BootstrapButton bbProject;
 
         public DnsItemViewHolder(View itemView) {
             super(itemView);
 
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvDns = (TextView) itemView.findViewById(R.id.tvDns);
+            bbName = (BootstrapButton) itemView.findViewById(R.id.bbName);
+            bbIp = (BootstrapButton) itemView.findViewById(R.id.bbIp);
+            bbProject = (BootstrapButton) itemView.findViewById(R.id.bbProject);
         }
     }
 
@@ -63,8 +66,8 @@ public class DnsRecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DnsItem dnsItem = dnsItemList.getDnsList().get(position);
         DnsItemViewHolder dnsItemViewHolder = (DnsItemViewHolder) holder;
-        dnsItemViewHolder.tvName.setText(dnsItem.getName());
-        dnsItemViewHolder.tvDns.setText(dnsItem.getDns());
+        dnsItemViewHolder.bbName.setText(dnsItem.getName());
+        dnsItemViewHolder.bbIp.setText(dnsItem.getDns());
     }
 
     @Override

@@ -10,6 +10,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dataBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.coolsharp.localvpn"
         minSdkVersion 14
@@ -27,6 +31,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:cardview-v7:21.0.+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'org.greenrobot:eventbus:3.0.0'

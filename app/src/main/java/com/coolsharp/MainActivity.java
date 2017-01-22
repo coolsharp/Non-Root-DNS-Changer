@@ -26,8 +26,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
-        final Button vpnButton = (Button) findViewById(R.id.vpn);
+        final BootstrapButton vpnButton = (BootstrapButton) findViewById(R.id.vpn);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         String json = "{\"dnsList\":[{\"name\":\"QA #1\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #2\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #3\",\"dns\":\"10.102.1.7\"}]}";
         DnsRecyclerViewAdapter dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
