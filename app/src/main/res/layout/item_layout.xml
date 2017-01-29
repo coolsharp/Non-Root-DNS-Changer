@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="dnsItem"
+            type="com.coolsharp.DnsItem" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        card_view:cardBackgroundColor="#445878"
+        card_view:cardCornerRadius="8dp">
+
+        <RelativeLayout
+            android:id="@+id/container_inner_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            tools:showIn="@layout/item_layout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <com.beardedhen.androidbootstrap.BootstrapButton
+                        android:id="@+id/bbName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@{dnsItem.name}"
+                        app:bootstrapBrand="success"
+                        app:roundedCorners="true"
+                        card_view:bootstrapSize="md" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/bbIp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="@{dnsItem.name}"
+                            app:bootstrapBrand="primary"
+                            app:roundedCorners="true"
+                            card_view:bootstrapSize="md" />
+
+                        <com.beardedhen.androidbootstrap.BootstrapButton
+                            android:id="@+id/bbProject"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:text="@{dnsItem.project}"
+                            app:bootstrapBrand="info"
+                            app:roundedCorners="true"
+                            card_view:bootstrapSize="md" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>
