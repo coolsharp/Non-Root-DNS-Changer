@@ -80,7 +80,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
         final BootstrapButton vpnButton = (BootstrapButton) findViewById(R.id.vpn);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        WeatherThread weatherThread = new WeatherThread(this, 10, 10);
+        weatherThread.run();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView); // https://raw.githubusercontent.com/coolsharp/Non-Root-DNS-Changer/master/dns.data
         String json = "{\"dnsList\":[{\"name\":\"QA #1\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #2\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #3\",\"dns\":\"10.102.1.7\"}]}";
         DnsRecyclerViewAdapter dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
         Gson gson = new GsonBuilder().create();

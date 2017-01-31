@@ -37,5 +37,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.beardedhen:androidbootstrap:2.3.1'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
     provided "org.projectlombok:lombok:1.12.6"
 }
