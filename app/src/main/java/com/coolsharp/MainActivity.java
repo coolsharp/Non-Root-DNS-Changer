@@ -27,7 +27,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -90,20 +89,19 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
-        final BootstrapButton vpnButton = (BootstrapButton) findViewById(R.id.vpn);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         loadDnsList();
         dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
         Gson gson = new GsonBuilder().create();
         recyclerView.setAdapter(dnsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        vpnButton.setOnClickListener(v -> {
-            if (isRunning()) {
-                startVpn();
-            } else {
-                stopVpn();
-            }
-        });
+//        vpnButton.setOnClickListener(v -> {
+//            if (isRunning()) {
+//                startVpn();
+//            } else {
+//                stopVpn();
+//            }
+//        });
         isRunningVpn = false;
         LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
                 new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));

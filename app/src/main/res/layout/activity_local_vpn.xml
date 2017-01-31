@@ -6,19 +6,7 @@
     android:orientation="vertical"
     android:padding="5dp"
     tools:context="com.coolsharp.MainActivity"
-    android:background="#31353D">
-
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/vpn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/start_vpn"
-        app:bootstrapBrand="primary"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        app:showOutline="false"
-        app:roundedCorners="true"
-        />
+    android:background="#002635">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

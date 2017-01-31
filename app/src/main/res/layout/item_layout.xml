@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        card_view:cardBackgroundColor="#445878"
+        card_view:cardBackgroundColor="#FFF0A5"
         card_view:cardCornerRadius="8dp">
 
         <RelativeLayout
@@ -41,14 +41,12 @@
                     android:layout_margin="5dp"
                     android:orientation="horizontal">
 
-                    <com.beardedhen.androidbootstrap.BootstrapButton
+                    <Button
                         android:id="@+id/bbName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="match_parent"
-                        android:text="@{dnsItem.name}"
-                        app:bootstrapBrand="success"
-                        app:roundedCorners="true"
-                        card_view:bootstrapSize="md" />
+                        android:background="@drawable/button_left"
+                        android:text="@{dnsItem.name}" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -56,27 +54,25 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <com.beardedhen.androidbootstrap.BootstrapButton
+                        <Button
                             android:id="@+id/bbIp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="#FFF"
                             android:layout_marginLeft="5dp"
-                            android:text="@{dnsItem.name}"
-                            app:bootstrapBrand="primary"
-                            app:roundedCorners="true"
-                            card_view:bootstrapSize="md" />
+                            android:background="@drawable/button_right_top"
+                            android:text="@{dnsItem.name}" />
 
-                        <com.beardedhen.androidbootstrap.BootstrapButton
+                        <Button
                             android:id="@+id/bbProject"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="#FFF"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="5dp"
                             android:layout_weight="1"
                             android:text="@{dnsItem.project}"
-                            app:bootstrapBrand="info"
-                            app:roundedCorners="true"
-                            card_view:bootstrapSize="md" />
+                            android:background="@drawable/button_right_bottom"/>
 
                     </LinearLayout>
 

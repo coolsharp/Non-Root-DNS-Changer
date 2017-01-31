@@ -20,8 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.beardedhen.androidbootstrap.BootstrapButton;
+import android.widget.Button;
 
 /**
  * Created by cools on 2017-01-20.
@@ -39,16 +38,16 @@ public class DnsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public final static class DnsItemViewHolder extends RecyclerView.ViewHolder {
 
-        public BootstrapButton bbName;
-        public BootstrapButton bbIp;
-        public BootstrapButton bbProject;
+        public Button bbName;
+        public Button bbIp;
+        public Button bbProject;
 
         public DnsItemViewHolder(View itemView) {
             super(itemView);
 
-            bbName = (BootstrapButton) itemView.findViewById(R.id.bbName);
-            bbIp = (BootstrapButton) itemView.findViewById(R.id.bbIp);
-            bbProject = (BootstrapButton) itemView.findViewById(R.id.bbProject);
+            bbName = (Button) itemView.findViewById(R.id.bbName);
+            bbIp = (Button) itemView.findViewById(R.id.bbIp);
+            bbProject = (Button) itemView.findViewById(R.id.bbProject);
         }
     }
 
