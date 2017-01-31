@@ -33,22 +33,34 @@ import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 /**
  * 메인 화면
  */
 public class MainActivity extends ActionBarActivity {
     // [final/static_property]====================[START]===================[final/static_property]
 
-    /** VPN 요청 코드 */
+    /**
+     * VPN 요청 코드
+     */
     private static final int VPN_REQUEST_CODE = 0x0F;
 
     // [final/static_property]=====================[END]====================[final/static_property]
     // [private/protected/public_property]========[START]=======[private/protected/public_property]
 
-    /** 작동중 */
+    /**
+     * 작동중
+     */
     private boolean isRunningVpn;
 
     private RecyclerView recyclerView;
+
+    private DnsRecyclerViewAdapter dnsRecyclerViewAdapter;
 
     // [private/protected/public_property]=========[END]========[private/protected/public_property]
     // [interface/enum/inner_class]===============[START]==============[interface/enum/inner_class]
@@ -72,7 +84,6 @@ public class MainActivity extends ActionBarActivity {
     // [life_cycle_method]========================[START]=======================[life_cycle_method]
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -80,13 +91,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
         final BootstrapButton vpnButton = (BootstrapButton) findViewById(R.id.vpn);
-        WeatherThread weatherThread = new WeatherThread(this, 10, 10);
-        weatherThread.run();
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView); // https://raw.githubusercontent.com/coolsharp/Non-Root-DNS-Changer/master/dns.data
-        String json = "{\"dnsList\":[{\"name\":\"QA #1\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #2\",\"dns\":\"10.102.1.7\"},{\"name\":\"QA #3\",\"dns\":\"10.102.1.7\"}]}";
-        DnsRecyclerViewAdapter dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        loadDnsList();
+        dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
         Gson gson = new GsonBuilder().create();
-        dnsRecyclerViewAdapter.setDnsItemList(gson.fromJson(json, DnsItemList.class));
         recyclerView.setAdapter(dnsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         vpnButton.setOnClickListener(v -> {
@@ -102,7 +110,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -147,6 +154,36 @@ public class MainActivity extends ActionBarActivity {
     private void stopVpn() {
         EventBus.getDefault().post(new EventVpn(EventVpn.DnsStatus.DS_STOP));
         isRunningVpn = false;
+    }
+
+    /**
+     * dns 리스트 로드
+     */
+    private void loadDnsList() {
+        new Thread(() -> {
+            Retrofit client = new Retrofit.Builder()
+                    .baseUrl("https://raw.githubusercontent.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            DnsItemList.DnsItemListApiInterface service = client.create(DnsItemList.DnsItemListApiInterface.class);
+
+            Call<DnsItemList> call = service.get_dns_item_list_retrofit();
+
+            call.enqueue(new Callback<DnsItemList>() {
+                @Override
+                public void onResponse(Call<DnsItemList> call, Response<DnsItemList> response) {
+                    if (response.isSuccessful()) {
+                        dnsRecyclerViewAdapter.setDnsItemList(response.body());
+                        dnsRecyclerViewAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DnsItemList> call, Throwable t) {
+                }
+            });
+        }).run();
     }
 
     // [private_method]============================[END]===========================[private_method]
