@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by cools on 2017-01-20.
  */
@@ -42,12 +44,27 @@ public class DnsRecyclerViewAdapter extends RecyclerView.Adapter {
         public Button bbIp;
         public Button bbProject;
 
+        /**
+         * 클릭 이벤트
+         */
+        private View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != v.getTag() && v.getTag() instanceof String) {
+                    EventBus.getDefault().post(new EventVpnOnClick((String)v.getTag()));
+                }
+            }
+        };
+
         public DnsItemViewHolder(View itemView) {
             super(itemView);
 
             bbName = (Button) itemView.findViewById(R.id.bbName);
             bbIp = (Button) itemView.findViewById(R.id.bbIp);
             bbProject = (Button) itemView.findViewById(R.id.bbProject);
+            bbName.setOnClickListener(onClickListener);
+            bbIp.setOnClickListener(onClickListener);
+            bbProject.setOnClickListener(onClickListener);
         }
     }
 
@@ -65,8 +82,14 @@ public class DnsRecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DnsItem dnsItem = dnsItemList.getDnsList().get(position);
         DnsItemViewHolder dnsItemViewHolder = (DnsItemViewHolder) holder;
+
         dnsItemViewHolder.bbName.setText(dnsItem.getName());
         dnsItemViewHolder.bbIp.setText(dnsItem.getDns());
+        dnsItemViewHolder.bbProject.setText(dnsItem.getProject());
+
+        dnsItemViewHolder.bbName.setTag(dnsItem.getDns());
+        dnsItemViewHolder.bbIp.setTag(dnsItem.getDns());
+        dnsItemViewHolder.bbProject.setTag(dnsItem.getDns());
     }
 
     @Override

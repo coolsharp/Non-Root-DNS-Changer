@@ -29,6 +29,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
+import static com.coolsharp.EventVpn.DnsStatus.DS_RUNNING;
+import static com.coolsharp.EventVpn.DnsStatus.DS_STOP;
+
 public class LocalVpnService extends VpnService {
     // [final/static_property]====================[START]===================[final/static_property]
 

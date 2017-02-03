@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,12 +32,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;import org.greenrobot.eventbus.ThreadMode;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static com.coolsharp.EventVpn.DnsStatus.DS_STOP;
 
 /**
  * 메인 화면
@@ -56,6 +60,8 @@ public class MainActivity extends ActionBarActivity {
      * 작동중
      */
     private boolean isRunningVpn;
+
+    private String dns;
 
     private RecyclerView recyclerView;
 
@@ -95,13 +101,6 @@ public class MainActivity extends ActionBarActivity {
         Gson gson = new GsonBuilder().create();
         recyclerView.setAdapter(dnsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        vpnButton.setOnClickListener(v -> {
-//            if (isRunning()) {
-//                startVpn();
-//            } else {
-//                stopVpn();
-//            }
-//        });
         isRunningVpn = false;
         LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
                 new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));
@@ -117,19 +116,23 @@ public class MainActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == VPN_REQUEST_CODE && resultCode == RESULT_OK) {
             Intent intent = new Intent(this, LocalVpnService.class);
-            intent.putExtra("dns", "10.102.1.7");
+            intent.putExtra("dns", dns);
             isRunningVpn = true;
             startService(intent);
 //            enableButton(false);
         }
     }
 
-    /**
-     *
-     */
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     // [life_cycle_method]=========================[END]========================[life_cycle_method]
@@ -138,19 +141,26 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Vpn 시작
      */
-    private void startVpn() {
-        Intent vpnIntent = VpnService.prepare(this);
-        if (vpnIntent != null)
-            startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
-        else
-            onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+    private void startVpn(String dns) {
+        this.dns = dns;
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent vpnIntent = VpnService.prepare(MainActivity.this);
+                if (vpnIntent != null)
+                    startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
+                else
+                    onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+            }
+        }, 100);
     }
 
     /**
      * Vpn 중지
      */
     private void stopVpn() {
-        EventBus.getDefault().post(new EventVpn(EventVpn.DnsStatus.DS_STOP));
+        EventBus.getDefault().post(new EventVpn(DS_STOP));
         isRunningVpn = false;
     }
 
@@ -186,6 +196,19 @@ public class MainActivity extends ActionBarActivity {
 
     // [private_method]============================[END]===========================[private_method]
     // [public_method]============================[START]===========================[public_method]
+
+    /**
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventVpnOnClick event) {
+        stopVpn();
+
+        startVpn(event.getIp());
+    }
+
+
     // [public_method]=============================[END]============================[public_method]
     // [get/set]==================================[START]=================================[get/set]
 
