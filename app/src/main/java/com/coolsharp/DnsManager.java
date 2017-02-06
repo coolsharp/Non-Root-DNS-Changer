@@ -2,7 +2,6 @@ package com.coolsharp;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -177,11 +176,15 @@ public class DnsManager {
     // [private_method]============================[END]===========================[private_method]
     // [public_method]============================[START]===========================[public_method]
 
+    /**
+     * Dns 설정
+     * @param context 컨텍스트
+     * @param dns Dns
+     */
     public static void setDns(Context context, String dns) {
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        final DhcpInfo dhcp = manager.getDhcpInfo();
         String ip = Formatter.formatIpAddress(manager.getConnectionInfo().getIpAddress());
-        String gateWay = Formatter.formatIpAddress(dhcp.gateway);
+        String gateWay = Formatter.formatIpAddress(manager.getDhcpInfo().gateway);
         WifiConfiguration wifiConf = new WifiConfiguration();
 
         if (wifiConf != null) {
