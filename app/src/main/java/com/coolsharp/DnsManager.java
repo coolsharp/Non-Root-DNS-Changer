@@ -187,18 +187,18 @@ public class DnsManager {
         if (wifiConf != null) {
             try {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
+                    setStaticIpConfiguration(manager, wifiConf,
+                            InetAddress.getByName(ip), 24,
+                            InetAddress.getByName(gateWay),
+                            new InetAddress[]{InetAddress.getByName(dns), InetAddress.getByName(DNS2)});
+                }
+                else {
                     setIpAssignment("STATIC", wifiConf); //or "DHCP" for dynamic setting
                     setIpAddress(InetAddress.getByName(ip), 24, wifiConf);
                     setGateway(InetAddress.getByName(gateWay), wifiConf);
                     setDNS(InetAddress.getByName(dns), wifiConf);
                     manager.updateNetwork(wifiConf); //apply the setting
                     manager.saveConfiguration(); //Save it
-                }
-                else {
-                    setStaticIpConfiguration(manager, wifiConf,
-                            InetAddress.getByName(ip), 24,
-                            InetAddress.getByName(gateWay),
-                            new InetAddress[]{InetAddress.getByName(dns), InetAddress.getByName(DNS2)});
                 }
             } catch (Exception e) {
                 e.printStackTrace();
