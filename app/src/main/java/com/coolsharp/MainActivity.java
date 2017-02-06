@@ -1,18 +1,19 @@
+
 /*
-** Copyright 2015, Mohamed Naufal
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
+ *                                             `''~``"
+ *                                           &( ^ a ^ )&
+ * ---------------------------------------.oooO-------Oooo.----------------------------------------
+ *  Description :
+ *  Date        : 17. 1. 18 오후 9:50
+ *  Author      : coolsharp
+ *  History     : 17. 1. 18 오후 9:50
+ *                                           .oooO
+ *                                          (   )   Oooo.
+ * -----------------------------------------\ (----(   )-----------------------------coolsharp 2017
+ *                                          \_)    ) /
+ *                                               (_/
+ *
+ */
 
 package com.coolsharp;
 
@@ -21,18 +22,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +67,8 @@ public class MainActivity extends ActionBarActivity {
     private boolean isRunningVpn;
 
     private String dns;
+
+    private BootstrapButton buttonDnsStop;
 
     private RecyclerView recyclerView;
 
@@ -95,6 +102,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_vpn);
+        buttonDnsStop = (BootstrapButton) findViewById(R.id.btnStopVpn);
+        buttonDnsStop.setOnClickListener(view -> {
+            stopVpn();
+        });
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         loadDnsList();
         dnsRecyclerViewAdapter = new DnsRecyclerViewAdapter();
@@ -102,8 +113,8 @@ public class MainActivity extends ActionBarActivity {
         recyclerView.setAdapter(dnsRecyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         isRunningVpn = false;
-        LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
-                new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));
+
+        checkOs();
     }
 
     /**
@@ -142,26 +153,35 @@ public class MainActivity extends ActionBarActivity {
      * Vpn 시작
      */
     private void startVpn(String dns) {
-        this.dns = dns;
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent vpnIntent = VpnService.prepare(MainActivity.this);
-                if (vpnIntent != null)
-                    startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
-                else
-                    onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
-            }
-        }, 100);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            // 마시멜로 이상
+            this.dns = dns;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent vpnIntent = VpnService.prepare(MainActivity.this);
+                    if (vpnIntent != null)
+                        startActivityForResult(vpnIntent, VPN_REQUEST_CODE);
+                    else
+                        onActivityResult(VPN_REQUEST_CODE, RESULT_OK, null);
+                }
+            }, 100);
+        }
+        else {
+            // 롤리팝
+            DnsManager.setDns(this, dns);
+        }
     }
 
     /**
      * Vpn 중지
      */
     private void stopVpn() {
-        EventBus.getDefault().post(new EventVpn(DS_STOP));
-        isRunningVpn = false;
+        
+            EventBus.getDefault().post(new EventVpn(DS_STOP));
+            isRunningVpn = false;
+        }
     }
 
     /**
@@ -192,6 +212,16 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
         }).run();
+    }
+
+    private void checkOs() {
+        buttonDnsStop.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
+            buttonDnsStop.setVisibility(View.VISIBLE);
+
+            LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
+                    new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));
+        }
     }
 
     // [private_method]============================[END]===========================[private_method]

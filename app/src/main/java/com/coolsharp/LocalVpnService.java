@@ -29,16 +29,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
-import static com.coolsharp.EventVpn.DnsStatus.DS_RUNNING;
-import static com.coolsharp.EventVpn.DnsStatus.DS_STOP;
-
 public class LocalVpnService extends VpnService {
     // [final/static_property]====================[START]===================[final/static_property]
 
     /** VPN 주소 */
     final static private String VPN_ADDRESS = "10.0.0.2"; // Only IPv4 support for now
-    /** DNS2 값 */
-    final static private String DNS2 = "10.102.4.1"; // Intercept everything
     /** 브로드캐스트 명칭 */
     final static public String BROADCAST_VPN_STATE = "com.coolsharp.VPN_STATE";
 
@@ -113,7 +108,7 @@ public class LocalVpnService extends VpnService {
             Builder builder = new Builder();
             builder.addAddress(VPN_ADDRESS, 32);
             builder.addDnsServer(dns); // "10.102.1.7"
-            builder.addDnsServer(DNS2);
+            builder.addDnsServer(DnsManager.DNS2);
             vpnInterface = builder.setSession(getString(R.string.app_name)).setConfigureIntent(pendingIntent).establish();
         }
     }

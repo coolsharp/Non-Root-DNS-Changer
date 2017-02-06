@@ -8,6 +8,19 @@
     tools:context="com.coolsharp.MainActivity"
     android:background="#002635">
 
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/btnStopVpn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="중지"
+        android:layout_margin="4dp"
+        app:bootstrapBrand="success"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        app:showOutline="false"
+        app:roundedCorners="true"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
