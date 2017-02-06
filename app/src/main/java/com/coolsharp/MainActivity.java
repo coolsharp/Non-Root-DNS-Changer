@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
      * Vpn 중지
      */
     private void stopVpn() {
-        
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             EventBus.getDefault().post(new EventVpn(DS_STOP));
             isRunningVpn = false;
         }
