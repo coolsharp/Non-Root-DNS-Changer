@@ -44,7 +44,7 @@ public class DnsItemList {
 
     public interface DnsItemListApiInterface {
         @Headers({"Accept: application/json"})
-        @GET("coolsharp/Non-Root-DNS-Changer/master/dns.data")
+        @GET("release/android/dns/dns.data")
 //        Call<DnsItemList> get_dns_item_list_retrofit(@Query("version") int version, @Query("lat") String lat, @Query("lon") String lon);
         Call<DnsItemList> get_dns_item_list_retrofit();
     }

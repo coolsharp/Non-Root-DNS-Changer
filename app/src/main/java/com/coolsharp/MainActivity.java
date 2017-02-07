@@ -155,6 +155,8 @@ public class MainActivity extends ActionBarActivity {
     private void startVpn(String dns) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             // 마시멜로 이상
+            buttonDnsStop.setVisibility(View.VISIBLE);
+
             this.dns = dns;
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -179,6 +181,7 @@ public class MainActivity extends ActionBarActivity {
      */
     private void stopVpn() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            buttonDnsStop.setVisibility(View.GONE);
             EventBus.getDefault().post(new EventVpn(DS_STOP));
             isRunningVpn = false;
         }
@@ -190,7 +193,7 @@ public class MainActivity extends ActionBarActivity {
     private void loadDnsList() {
         new Thread(() -> {
             Retrofit client = new Retrofit.Builder()
-                    .baseUrl("https://raw.githubusercontent.com/")
+                    .baseUrl("http://10.102.20.134/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -214,11 +217,12 @@ public class MainActivity extends ActionBarActivity {
         }).run();
     }
 
+    /**
+     * OS를 체크하여 분기함
+     */
     private void checkOs() {
         buttonDnsStop.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
-            buttonDnsStop.setVisibility(View.VISIBLE);
-
             LocalBroadcastManager.getInstance(this).registerReceiver(vpnStateReceiver,
                     new IntentFilter(LocalVpnService.BROADCAST_VPN_STATE));
         }
@@ -228,7 +232,7 @@ public class MainActivity extends ActionBarActivity {
     // [public_method]============================[START]===========================[public_method]
 
     /**
-     *
+     * 메시지 이벤트 수신 처리
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
