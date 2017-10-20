@@ -193,7 +193,7 @@ public class MainActivity extends ActionBarActivity {
     private void loadDnsList() {
         new Thread(() -> {
             Retrofit client = new Retrofit.Builder()
-                    .baseUrl("http://10.102.20.134/")
+                    .baseUrl("http://191.168.0.1/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
